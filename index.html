@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/quinn.css">
+        <style type="text/css">
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+
+            .blackout {
+                background-color: black;
+                width: 100%;
+            }
+
+            .weight {
+                text-align: right;
+            }
+
+            input {
+                width: 75px;
+                max-width: 75px;
+                text-align: right;
+            }
+
+            .heading {
+                text-align: center;
+            }
+
+            .good {
+                color: darkblue;
+                font-weight: bolder;
+            }
+
+            .bad {
+                color: red;
+                font-weight: bolder;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            .container {
+                height: 100%;
+                width: 100%;
+            }
+
+            .tableDiv {
+                width: max-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tableDiv">
+            <table border="0">
+                <tr>
+                    <td colspan="4" class="heading">Step 1. Verify the correct values</td>
+                </tr>
+                <tr>
+                    <td>What level is freshwater tank?</td>
+                    <td id="fresh_input_div"><input type="range" class="slideable" name="fresh_input" id="fresh_input"
+                            value="100"></td>
+                    <td>%</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>What level is fuel tank?</td>
+                    <td id="gas_input_div"><input type="range" class="slideable" name="gas_input" id="gas_input"
+                            value="100"></td>
+                    <td>%</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>What level is propane?</td>
+                    <td id="lpg_input_div"><input type="range" class="slideable" name="lpg_input" id="lpg_input"
+                            value="100"></td>
+                    <td>%</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="heading">Step 2. Enter combined weight of all people travelling.</td>
+                </tr>
+                <tr>
+                    <td>Combined Passenger Weight?</td>
+                    <td id="pass_input_div"><input type="number" class="changeable" name="pass_input" id="pass_input"
+                            value="0" min="0" max="100"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="heading">Step 3. Are you towing?</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="heading"><input class="radio" type="radio" name="towing" value="true"> Yes
+                        &nbsp;<input class="radio" type="radio" name="towing" value="false" checked> No</td>
+                </tr>
+                <tr class="hideable hide">
+                    <td>Total Trailer Weight?</td>
+                    <td id="trailer_input_div"><input type="number" class="changeable tow" name="trailer_input"
+                            id="trailer_input" value="0"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="hideable hide">
+                    <td>Trailer Tongue Weight?</td>
+                    <td id="trailer_tongue_div"><input type="number" class="changeable tow" name="trailer_tongue"
+                            id="trailer_tongue" value="0"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Curb(Dry) Weight</td>
+                    <td class="weight" id="curb_div"><input type="number" readonly="readonly" name="curb_input"
+                            id="curb_input">
+                    </td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Variable Weight Total</td>
+                    <td class="weight" id="ccw_div"><input type="number" readonly="readonly" name="ccw_input"
+                            id="ccw_input">
+                    </td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Current Weight of Freshwater</td>
+                    <td>&nbsp;</td>
+                    <td class="weight" id="fresh_div_wt"><input type="number" readonly="readonly" name="fresh_wt_input"
+                            id="fresh_wt_input"></td>
+                    <td>pounds</td>
+                </tr>
+                <tr>
+                    <td>Passenger Weight</td>
+                    <td>&nbsp;</td>
+                    <td class="weight" id="pass_mirror_div"><input type="number" readonly="readonly" name="pass_mirror"
+                            id="pass_mirror"></td>
+                    <td>pounds</td>
+                </tr>
+                <tr class="hideable hide">
+                    <td>Trailer Tongue Weight</td>
+                    <td>&nbsp;</td>
+                    <td class=weight id="trailer_tongue_mirror_div"><input type="number" class="tow" readonly="readonly"
+                            name="trailer_tongue_mirror" id="trailer_tongue_mirror" value="0"></td>
+                    <td>pounds</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="heading">These are the total weights</td>
+                </tr>
+                <tr class="impRow">
+                    <td>Current Calculated Weight</td>
+                    <td class="weight" id="curcal_div"><input class="impShow" type="number" readonly="readonly"
+                            name="curcal" id="curcal"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="impRow">
+                    <td>GVWR</td>
+                    <td class="weight" id="gvwr_div"><input class="impShow" type="number" readonly="readonly"
+                            name="gvwr" id="gvwr"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="impRow">
+                    <td>Remaining Weight Available</td>
+                    <td class="weight" id="rema_div"><input class="impShow" type="number" readonly="readonly"
+                            name="rema" id="rema"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="hideable trShowRow hide">
+                    <td>Trailer Weight</td>
+                    <td id="trailer_show_div"><input type="number" class="trShowInput" readonly="readonly"
+                            name="trailer_show" id="trailer_show"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="hideable trShowRow hide">
+                    <td>GCWR</td>
+                    <td id="gcwr_div"><input type="number" class="trShowInput" readonly="readonly" name="gcwr"
+                            id="gcwr">
+                    </td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="hideable trShowRow hide">
+                    <td>Remaining Trailer Weight</td>
+                    <td id="tr_rema_div"><input type="number" class="trShowInput" readonly="readonly" name="tr_rema"
+                            id="tr_rema"></td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="heading">Other Current Info</td>
+                </tr>
+                <tr>
+                    <td>Current Amount of Freshwater</td>
+                    <td class="weight" id="fresh_div"><input type="number" readonly="readonly" name="fresh_gal"
+                            id="fresh_gal">
+                    </td>
+                    <td>gallons</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Current Amount of Gas</td>
+                    <td class="weight" id="gasnow_div"><input type="number" readonly="readonly" name="gasnow"
+                            id="gasnow">
+                    </td>
+                    <td>gallons</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Current Amount of Propane</td>
+                    <td class="weight" id="lpgnow_div"><input type="number" readonly="readonly" name="lpgnow"
+                            id="lpgnow">
+                    </td>
+                    <td>pounds</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script src="/underscore.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="/jquery.quinn.js"></script>
+    <script>
+
+        const gvwr = 18000;
+        const gcwr = 23000;
+        const maxTrailer = 5000;
+        const fullWater = 72;
+        const fullWaterWt = 597;
+        const curbBase = 16288;
+        const maxGas = 80;
+        const gasWtGal = 6;
+        const maxLpt = 55;
+
+        function calcGasWt() {
+            var full = $("#gas_input").val();
+            var currentGal = (full / 100) * maxGas;
+            var current = currentGal * gasWtGal;
+            var usedWt = (maxGas * gasWtGal) - current;
+            $("#gas_input").parent().next().text(full + "%");
+            $("#gasnow").val(Math.floor(currentGal));
+            return usedWt;
+        }
+
+        function calcLpgWt() {
+            var full = $("#lpg_input").val();
+            var current = (full / 100) * maxLpt;
+            var usedWt = maxLpt - current;
+            $("#lpg_input").parent().next().text(full + "%");
+            $("#lpgnow").val(Math.floor(current));
+            return usedWt;
+        }
+
+        function freshWaterTankWt() {
+            var full = $("#fresh_input").val();
+            var current = Math.ceil((full) / 100 * fullWaterWt);
+            var currentGal = (full / 100) * fullWater;
+            $("#fresh_wt_input").val(Math.ceil(current));
+            $("#fresh_gal").val(Math.floor(currentGal));
+            $("#fresh_input").parent().next().text(full + "%");
+            return current;
+        }
+
+        function calc() {
+            var curb = Math.ceil(curbBase - calcGasWt() - calcLpgWt());
+            $("#curb_input").val(curb);
+
+            $("#pass_mirror").val(Math.ceil($("#pass_input").val()));
+
+            $("#trailer_tongue_mirror").val(Math.ceil($("#trailer_tongue").val()));
+
+            var ccw = Number($("#pass_mirror").val()) + Number(freshWaterTankWt() + Number($("#trailer_tongue_mirror").val()));
+            $("#ccw_input").val(ccw);
+
+            var avccw = ccw - freshWaterTankWt() - $("#pass_input").val();
+            $("#avccw_input").val(avccw);
+
+            var curcal = curb + ccw;
+            $("#curcal").val(curcal);
+
+            var rema = gvwr - curcal;
+            $("#rema").val(rema);
+
+            var trailerWt = Math.ceil(Number($("#trailer_input").val()));
+            $("#trailer_show").val(trailerWt);
+
+            var tr_rema = maxTrailer - trailerWt;
+            $("#tr_rema").val(tr_rema);
+
+            if (trailerWt > maxTrailer || ((curcal + trailerWt) > gcwr)) {
+                $(".trShowRow").children("td").removeClass("good").addClass("bad");
+                $(".trShowInput").removeClass("good").addClass("bad");
+            } else {
+                $(".trShowRow").children("td").removeClass("bad").addClass("good");
+                $(".trShowInput").removeClass("bad").addClass("good");
+            }
+
+            if (rema >= 0) {
+                $(".impRow").children("td").removeClass("bad").addClass("good");
+                $(".impShow").removeClass("bad").addClass("good");
+            } else {
+                $(".impRow").children("td").removeClass("good").addClass("bad");
+                $(".impShow").removeClass("good").addClass("bad");
+            }
+        }
+
+        $(document).ready(function () {
+
+            $('.slideable').quinn({
+                min: 0,
+                max: 100,
+                step: 1,
+                strict: true,
+                change: function (newValue, slider) {
+                    calc();
+                },
+                drag: function (newValue, slider) {
+                    calc();
+                }
+            });
+            $("#gvwr").val(gvwr);
+            $("#gcwr").val(gcwr);
+            $(".changeable").on('keyup change', calc);
+            $(".radio").on('change', function () {
+                if ($("input[name=towing]:checked").val() === 'false') {
+                    $(".hideable").addClass("hide");
+                    $(".tow").val(0);
+                } else {
+                    $(".hideable").removeClass("hide");
+                }
+
+            });
+
+            calc();
+
+        });
+    </script>
+</body>
+
+</html>
