@@ -6,65 +6,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/quinn.css">
-        <style type="text/css">
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                width: 100%;
-            }
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
 
-            .blackout {
-                background-color: black;
-                width: 100%;
-            }
+        .blackout {
+            background-color: black;
+            width: 100%;
+        }
 
-            .weight {
-                text-align: right;
-            }
+        .weight {
+            text-align: right;
+        }
 
-            input {
-                width: 75px;
-                max-width: 75px;
-                text-align: right;
-            }
+        input {
+            width: 75px;
+            max-width: 75px;
+            text-align: right;
+        }
 
-            .heading {
-                text-align: center;
-            }
+        table {
+            table-layout: fixed;
+        }
 
-            .good {
-                color: darkblue;
-                font-weight: bolder;
-            }
+        .heading {
+            text-align: center;
+            word-wrap: break-word;
+        }
 
-            .bad {
-                color: red;
-                font-weight: bolder;
-            }
+        .bold {
+            font-weight: bold;
+        }
 
-            .hide {
-                display: none;
-            }
+        .good {
+            color: darkblue;
+            font-weight: bolder;
+        }
 
-            .container {
-                height: 100%;
-                width: 100%;
-            }
+        .bad {
+            color: red;
+            font-weight: bolder;
+        }
 
-            .tableDiv {
-                width: max-content;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        </style>
+        .hide {
+            display: none;
+        }
+
+        .container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .tableDiv {
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <div class="tableDiv">
             <table border="0">
+                <tr>
+                    <td colspan="4" class="heading bold">This tool can't be used in place of all the Manufacturer weight
+                        information in the RV. It was created to give you a general estimate of the vehicle weights.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="blackout">&nbsp;</td>
+                </tr>
                 <tr>
                     <td colspan="4" class="heading">Step 1. Verify the correct values</td>
                 </tr>
@@ -86,6 +103,20 @@
                     <td>What level is propane?</td>
                     <td id="lpg_input_div"><input type="range" class="slideable" name="lpg_input" id="lpg_input"
                             value="100"></td>
+                    <td>%</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>What level is gray tank?</td>
+                    <td id="gray_input_div"><input type="range" class="slideable" name="gray_input" id="gray_input"
+                            value="0"></td>
+                    <td>%</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>What level is black tank?</td>
+                    <td id="black_input_div"><input type="range" class="slideable" name="black_input" id="black_input"
+                            value="0"></td>
                     <td>%</td>
                     <td>&nbsp;</td>
                 </tr>
@@ -150,6 +181,20 @@
                     <td>&nbsp;</td>
                     <td class="weight" id="fresh_div_wt"><input type="number" readonly="readonly" name="fresh_wt_input"
                             id="fresh_wt_input"></td>
+                    <td>pounds</td>
+                </tr>
+                <tr>
+                    <td>Current Weight of Gray Water</td>
+                    <td>&nbsp;</td>
+                    <td class="weight" id="gray_div_wt"><input type="number" readonly="readonly" name="gray_wt_input"
+                            id="gray_wt_input"></td>
+                    <td>pounds</td>
+                </tr>
+                <tr>
+                    <td>Current Weight of Black Water</td>
+                    <td>&nbsp;</td>
+                    <td class="weight" id="black_div_wt"><input type="number" readonly="readonly" name="black_wt_input"
+                            id="black_wt_input"></td>
                     <td>pounds</td>
                 </tr>
                 <tr>
@@ -245,6 +290,22 @@
                     <td>pounds</td>
                     <td>&nbsp;</td>
                 </tr>
+                <tr>
+                    <td>Current Gray Tank usage</td>
+                    <td class="weight" id="graynow_div"><input type="number" readonly="readonly" name="graynow"
+                            id="graynow">
+                    </td>
+                    <td>gallons</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Current Black Tank usage</td>
+                    <td class="weight" id="blacknow_div"><input type="number" readonly="readonly" name="blacknow"
+                            id="blacknow">
+                    </td>
+                    <td>gallons</td>
+                    <td>&nbsp;</td>
+                </tr>
             </table>
         </div>
     </div>
@@ -261,13 +322,37 @@
         const curbBase = 16288;
         const maxGas = 80;
         const gasWtGal = 6;
+        const sewWtGal = 8.3;
         const maxLpt = 55;
+        const baseGray = 40;
+        const baseBlack = 49;
+
+        function calcBlack() {
+            var full = $("#black_input").val();
+            var currentGal = (full / 100) * baseBlack;
+            var current = Math.ceil(currentGal * sewWtGal);
+            $("#black_wt_input").val(Math.ceil(current));
+            $("#black_input").parent().next().text(full + "%");
+            $("#blacknow").val(Math.ceil(currentGal));
+            return current;
+        }
+
+        function calcGray() {
+            var full = $("#gray_input").val();
+            var currentGal = (full / 100) * baseGray;
+            var current = Math.ceil(currentGal * sewWtGal);
+            $("#gray_wt_input").val(Math.ceil(current));
+            $("#gray_input").parent().next().text(full + "%");
+            $("#graynow").val(Math.ceil(currentGal));
+            return current;
+        }
 
         function calcGasWt() {
             var full = $("#gas_input").val();
             var currentGal = (full / 100) * maxGas;
             var current = currentGal * gasWtGal;
             var usedWt = (maxGas * gasWtGal) - current;
+            $("#fresh_wt_input").val(Math.ceil(current));
             $("#gas_input").parent().next().text(full + "%");
             $("#gasnow").val(Math.floor(currentGal));
             return usedWt;
@@ -294,13 +379,14 @@
 
         function calc() {
             var curb = Math.ceil(curbBase - calcGasWt() - calcLpgWt());
+
             $("#curb_input").val(curb);
 
             $("#pass_mirror").val(Math.ceil($("#pass_input").val()));
 
             $("#trailer_tongue_mirror").val(Math.ceil($("#trailer_tongue").val()));
 
-            var ccw = Number($("#pass_mirror").val()) + Number(freshWaterTankWt() + Number($("#trailer_tongue_mirror").val()));
+            var ccw = Number($("#pass_mirror").val()) + Number(freshWaterTankWt()) + Number($("#trailer_tongue_mirror").val()) + Number(calcBlack()) + Number(calcGray());
             $("#ccw_input").val(ccw);
 
             var avccw = ccw - freshWaterTankWt() - $("#pass_input").val();
